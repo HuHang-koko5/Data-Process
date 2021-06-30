@@ -1,4 +1,3 @@
-
 import random
 import re
 import nltk
@@ -159,41 +158,26 @@ def eda(sentence, alpha_sr=0.1,
     words = sentence.split(' ')
     words = [word for word in words if word is not '']
     num_words = len(words)
-
+    # print('---')
     augmented_sentences = []
     num_new_per_technique = int(num_aug / 4) + 1
     # sr
     if alpha_sr > 0:
-        n_sr = max(1, int(alpha_sr * num_words))
         for _ in range(num_new_per_technique):
-            a_words = synonym_replacement(words, n_sr)
-            a_words = ' '.join(a_words)
-            if a_words not in augmented_sentences:
-                augmented_sentences.append(a_words)
+            augmented_sentences.append(sentence)
     # ri
     if alpha_ri > 0:
-        n_ri = max(1, int(alpha_ri * num_words))
         for _ in range(num_new_per_technique):
-            a_words = random_insertion(words, n_ri)
-            a_words = ' '.join(a_words)
-            if a_words not in augmented_sentences:
-                augmented_sentences.append(a_words)
+            augmented_sentences.append(sentence)
     # rs
-    if alpha_sr > 0:
-        n_rs = max(1, int(alpha_rs * num_words))
+    if alpha_rs > 0:
         for _ in range(num_new_per_technique):
-            a_words = random_swap(words, n_rs)
-            a_words = ' '.join(a_words)
-            if a_words not in augmented_sentences:
-                augmented_sentences.append(a_words)
+            augmented_sentences.append(sentence)
     # rd
     if p_rd > 0:
         for _ in range(num_new_per_technique):
-            a_words = random_deletion(words, p_rd)
-            a_words = ' '.join(a_words)
-            if a_words not in augmented_sentences:
-                augmented_sentences.append(a_words)
-
+            augmented_sentences.append(sentence)
+    # print(augmented_sentences)
     augmented_sentences = [get_chars(sentence) for sentence in augmented_sentences]
     shuffle(augmented_sentences)
 
@@ -204,6 +188,6 @@ def eda(sentence, alpha_sr=0.1,
         augmented_sentences = [s for s in augmented_sentences if random.uniform(0, 1) < keep_prob]
     if sentence not in augmented_sentences:
         augmented_sentences.append(sentence)
-    augmented_sentences = list(set(augmented_sentences))
+    # augmented_sentences = list(set(augmented_sentences))
 
     return augmented_sentences
